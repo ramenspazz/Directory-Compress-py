@@ -34,7 +34,10 @@ def format_byte(number):
 
 def main():
     try:
-        if (len(sys.argv) == 3) and os.path.isdir(sys.argv[1]):
+        if sys.argv[1] == 'h':
+            print('h displays help\nEnter number of threads to use for compression, input directory name, and output filename.\n')
+            return
+        elif(len(sys.argv) == 3) and os.path.isdir(sys.argv[1]):
             threadpool = []
             count = 0
             if multiprocessing.cpu_count() == 1:
