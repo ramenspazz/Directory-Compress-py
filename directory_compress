@@ -1,0 +1,2 @@
+#!/bin/bash
+sudo python3 ~/.bin/dir_comp_script.py $1 $2
