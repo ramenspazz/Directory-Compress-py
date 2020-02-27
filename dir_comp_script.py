@@ -49,7 +49,8 @@ def main():
         elif (len(args) >= 3) and os.path.isdir(args[1]) :
             threadpool = []
             count = 0
-            if len(args) == 3: # auto select number of cores to use
+#            print(len(args))
+            if len(args) == 2: # auto select number of cores to use
                 # if the user machine has only 1 core, use that
                 if multiprocessing.cpu_count() == 1:
                     cores = 1
