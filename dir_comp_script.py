@@ -77,8 +77,6 @@ def main():
                         fout = os.path.getsize(sys.argv[2]+file_format)
                         cur_char = animation_ascii[count % len(animation_ascii)]
                         count = count + 1
-                        #sys.stdout.write("\r\033[K")
-                        #sys.stdout.write('I love Lolis\n')
                         c_fsize = float(fout)/float(total_size)
                         msg = 'Elapsed Time:   {:6.0f}   Seconds   {}   File Size:   {} @ {:5.4f}'.format(math.floor(c_time*s_per_ns),cur_char,format_byte(fout),c_fsize)
                         print(msg, end="\r", flush=True)
