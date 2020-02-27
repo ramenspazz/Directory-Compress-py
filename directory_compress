@@ -2,6 +2,8 @@
 if [[ $# -eq 1 ]]; then
     sudo python3.8 ~/.bin/Directory-Compress-py/dir_comp_script.py $1
 elif [[ $# -ne 3 ]]; then
+    sudo python3.8 ~/.bin/Directory-Compress-py/dir_comp_script.py $1 $2
+elif [[ $# -ne 2 ]]; then
     sudo python3.8 ~/.bin/Directory-Compress-py/dir_comp_script.py $1 $2 $3
 fi
 
