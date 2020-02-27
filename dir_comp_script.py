@@ -50,7 +50,7 @@ def main():
             threadpool = []
             count = 0
 #            print(len(args))
-            if len(args) == 2: # auto select number of cores to use
+            if len(args) == 3: # auto select number of cores to use
                 # if the user machine has only 1 core, use that
                 if multiprocessing.cpu_count() == 1:
                     cores = 1
