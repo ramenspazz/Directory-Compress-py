@@ -5,7 +5,7 @@ import time
 import math
 import multiprocessing
 
-assert sys.version_info >= (3, 7)
+assert sys.version_info >= (3, 8)
 
 s_per_ns = 10**(-9)
 up_per_sec = 5
@@ -34,40 +34,53 @@ def format_byte(number):
 
 def main():
     try:
-        if len(sys.argv) == 1 and sys.argv[1]) == 'h':
-            print('h displays help\nEnter number of threads to use for compression, input directory name, and output filename.\n')
-            return
-        elif(len(sys.argv) == 3) and os.path.isdir(sys.argv[1]):
+
+    # Check if user requested help, and setup argument list
+        args = []
+        for val in sys.argv:
+            args.append(val)
+
+        if args[1] == 'help' or args[1] == 'h':
+            print('h or help, displays this help text.\nEnter input directory name, output filename, and optionally the number of threads to use for compression.\n')
+            return 0
+
+    # Check if the number of arguments passed in the initial call directory_compress is equal to 2 or 3 (+1 in code for
+    # script as argv[0]) and if it is true, check if the user specified the number of threads to use.
+        elif (len(args) >= 3) and os.path.isdir(args[1]) :
             threadpool = []
             count = 0
-            if multiprocessing.cpu_count() == 1:
-                cores = 1
+            if len(args) == 3: # auto select number of cores to use
+                # if the user machine has only 1 core, use that
+                if multiprocessing.cpu_count() == 1:
+                    cores = 1
+                # else, use one less than the number of cores available. favors speed and keeps a thread open for other tasks
+                else:
+                    cores = multiprocessing.cpu_count()-1
             else:
-                cores = multiprocessing.cpu_count()-1
-            cmd_final = cmd.format(sys.argv[1],cores,sys.argv[2])
-            path = sys.argv[1]
-            index = -1
-            for n in range(0,len(path)):
-                if path[len(path) - n - 1] == '/':
-                    index =  len(path) - n - 1
-                    break
-            path = path[0:index]
-            print(path+'/ is current path\n')
+                cores = args[3]
+
+            cmd_final = cmd.format(sys.argv[1],cores,args[2])
+
+        # get an estimate of how large the directory beeing compressed is
             total_size = 0
             c_fsize = 0
             fout = 0
-            start_path = sys.argv[1]  # To get size of current directory
-            for path, dirs, files in os.walk(start_path):
+            for p, dirs, files in os.walk(args[1]):
                 for f in files:
-                    fp = os.path.join(path, f)
+                    fp = os.path.join(p, f)
                     total_size += os.path.getsize(fp)
-            print("Original size: {}\nUsing {} threads.".format(format_byte(total_size), multiprocessing.cpu_count()-1))
-            #os.system('touch {}'.format(path+file_format))
+            # output origional size of directory being compressed
+            if total_size == 0:
+                print('Empty Directory or Directory with only empty/hidden files! Exiting...\n')
+                return -1
+            print("Original size: {}\nUsing {} threads.".format(format_byte(total_size), cores))
+        # create thread for running compression in background, while displaying output via console using time.sleep(#s)
             threadpool.append(threading.Thread(target=os.system, args=(cmd_final,))) # add job threads to pool
             for t in threadpool: # start threads
                 t.start()
             t_start = time.clock_gettime_ns(time.CLOCK_REALTIME)
             t_temp1 = t_start
+        # start the display subroutine to show progress, and realtime updates as available to the console
             while True:
                 t_temp2 = time.clock_gettime_ns(time.CLOCK_REALTIME)
                 if threading.active_count() > 1:
@@ -92,9 +105,11 @@ def main():
                     for t in threadpool:
                         t.join()
                     return
+
         elif len(sys.argv) == 0:
             print('Not enough arguments!\n')
             return
+    # except cntrl+c break to properly exit        
     except KeyboardInterrupt:
         print('Exiting...\n')
         return
