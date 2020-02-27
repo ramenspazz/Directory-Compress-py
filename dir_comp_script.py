@@ -5,7 +5,7 @@ import time
 import math
 import multiprocessing
 
-assert sys.version_info >= (3, 8)
+assert sys.version_info >= (3, 7)
 
 s_per_ns = 10**(-9)
 up_per_sec = 5
