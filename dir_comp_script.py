@@ -34,7 +34,7 @@ def format_byte(number):
 
 def main():
     try:
-        if sys.argv[1] == 'h':
+        if len(sys.argv) == 1 and sys.argv[1]) == 'h':
             print('h displays help\nEnter number of threads to use for compression, input directory name, and output filename.\n')
             return
         elif(len(sys.argv) == 3) and os.path.isdir(sys.argv[1]):
