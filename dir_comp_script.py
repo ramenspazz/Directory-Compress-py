@@ -34,12 +34,10 @@ def format_byte(number):
 
 def main():
     try:
-
-    # Check if user requested help, and setup argument list
         args = []
         for val in sys.argv:
             args.append(val)
-
+    # Check if user requested help, and setup argument list
         if args[1] == 'help' or args[1] == 'h':
             print('h or help, displays this help text.\nEnter input directory name, output filename, and optionally the number of threads to use for compression.\n')
             return 0
@@ -65,12 +63,12 @@ def main():
             total_size = 0
             c_fsize = 0
             fout = 0
+            # get the size of the uncompressed user-specified file directory
             for p, dirs, files in os.walk(args[1]):
                 for f in files:
                     fp = os.path.join(p, f)
                     if not os.path.islink(fp):
                         total_size += os.path.getsize(fp)
-            # output origional size of directory being compressed
             if total_size == 0:
                 print('Empty Directory or Directory with only empty/hidden files! Exiting...\n')
                 return -1
@@ -81,7 +79,8 @@ def main():
                 t.start()
             t_start = time.clock_gettime_ns(time.CLOCK_REALTIME)
             t_temp1 = t_start
-        # start the display subroutine to show progress, and realtime updates as available to the console
+        # start the display subroutine, updating the current progress at a frequency of 
+        # 1/update_rate seconds  as available to the console
             while True:
                 t_temp2 = time.clock_gettime_ns(time.CLOCK_REALTIME)
                 if threading.active_count() > 1:
