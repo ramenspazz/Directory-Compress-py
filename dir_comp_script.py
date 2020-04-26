@@ -5,7 +5,7 @@ import time
 import math
 import multiprocessing
 
-assert sys.version_info >= (3, 7)
+#assert sys.version_info >= (3, 7)
 
 s_per_ns = 10**(-9)
 up_per_sec = 5
@@ -69,7 +69,8 @@ def main():
             for p, dirs, files in os.walk(args[1]):
                 for f in files:
                     fp = os.path.join(p, f)
-                    total_size += os.path.getsize(fp)
+                    if not os.path.islink(fp):
+                        total_size += os.path.getsize(fp)
             # output origional size of directory being compressed
             if total_size == 0:
                 print('Empty Directory or Directory with only empty/hidden files! Exiting...\n')
