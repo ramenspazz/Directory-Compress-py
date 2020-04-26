@@ -5,10 +5,10 @@ import time
 import math
 import multiprocessing
 
-#assert sys.version_info >= (3, 7)
+# assert sys.version_info >= (3, 7)
 
 s_per_ns = 10**(-9)
-up_per_sec = 5
+update_rate = 5
 cmd = 'tar c {} | xz --threads={} > {}.tar.xz'
 bit_suffix = 'B'
 bit_prefix = ['Gi','Mi','Ki','']
@@ -49,7 +49,6 @@ def main():
         elif (len(args) >= 3) and os.path.isdir(args[1]) :
             threadpool = []
             count = 0
-#            print(len(args))
             if len(args) == 3: # auto select number of cores to use
                 # if the user machine has only 1 core, use that
                 if multiprocessing.cpu_count() == 1:
@@ -86,7 +85,7 @@ def main():
             while True:
                 t_temp2 = time.clock_gettime_ns(time.CLOCK_REALTIME)
                 if threading.active_count() > 1:
-                    if (t_temp2 - t_temp1) > 1/(s_per_ns * up_per_sec):
+                    if (t_temp2 - t_temp1) > 1/(s_per_ns * update_rate):
                         t_temp1 = t_temp2
                         c_time = t_temp2 - t_start
                         fout = os.path.getsize(sys.argv[2]+file_format)
