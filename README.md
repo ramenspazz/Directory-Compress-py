@@ -1,5 +1,5 @@
 # TL;DR
-directory_compress {directory} {#threads} {output name}
+directory_compress {#threads} {directory} {output name}
 same effect (sans visual info, and a few useful but noncritical addons) as:
   'tar c {} | xz --threads={} > {}.tar.xz'
   
